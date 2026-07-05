@@ -546,6 +546,18 @@
             background-color: #b89245;
         }
 
+        /* --- SUCCESS MESSAGE STYLING --- */
+        #success-message {
+            text-align: center;
+            padding: 20px;
+        }
+
+        #success-message h2 {
+            font-family: 'Cinzel', serif;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
         /* --- REDESIGNED FOOTER --- */
         footer {
             width: 100vw;
@@ -611,8 +623,7 @@
         <main>
             <!-- High-Res Central Poster View Component -->
             <div class="poster-container">
-                <!-- UPDATED FILE NAME HERE -->
-                <img src="invitation.png" alt="Wedding Invitation Poster">
+                <img src="Amith Wedding invitation.png" alt="Wedding Invitation Poster">
             </div>
 
             <!-- Double-Action Contextual Buttons Right Under Poster -->
@@ -684,7 +695,8 @@
                 <p class="rsvp-subtitle">Kindly let us know if you and your family will be joining us for our celebrations.</p>
 
                 <div class="rsvp-card">
-                    <form class="rsvp-form" action="https://formspree.io/f/xjgqlorr" method="POST">
+                    <!-- Form now uses ID for AJAX handling -->
+                    <form id="rsvp-form" action="https://formspree.io/f/xjgqlorr" method="POST">
                         
                         <div class="rsvp-form-group">
                             <label for="primary-name" class="field-label">Primary Guest Name</label>
@@ -761,6 +773,12 @@
 
                         <button type="submit" class="btn-send-rsvp">Send RSVP</button>
                     </form>
+
+                    <!-- Hidden Success Message -->
+                    <div id="success-message" style="display:none;">
+                        <h2>Thank You!</h2>
+                        <p>Your RSVP has been received with gratitude. We look forward to seeing you at our wedding.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -769,12 +787,10 @@
         <footer>
             <h4 class="with-love">With Love</h4>
             <div class="footer-line"></div>
-            <!-- Updated to requested signature -->
             <p class="footer-names">SandhyAmi🩵</p>
         </footer>
     </div>
 
-    <!-- Background JS Core Handlers -->
     <script>
         let isMusicPlaying = true;
 
@@ -785,9 +801,8 @@
             document.getElementById('music-toggle-btn').style.display = 'flex';
 
             const audio = document.getElementById('wedding-audio');
-            // Play the local audio file when the invitation is opened
             audio.play().catch(error => {
-                console.log("Audio playback failed (browser may require interaction):", error);
+                console.log("Audio playback failed:", error);
             });
         }
 
@@ -819,9 +834,28 @@
                 }).catch(err => console.log(err));
             } else {
                 navigator.clipboard.writeText(window.location.href);
-                alert('Link copied to clipboard! Share it with your friends and family.');
+                alert('Link copied to clipboard!');
             }
         }
+
+        // AJAX Handle Form Submit
+        const form = document.getElementById("rsvp-form");
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const response = await fetch(form.action, {
+                method: form.method,
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (response.ok) {
+                form.style.display = "none";
+                document.getElementById("success-message").style.display = "block";
+            } else {
+                alert("There was a problem submitting your RSVP. Please try again.");
+            }
+        });
     </script>
 </body>
 </html>
