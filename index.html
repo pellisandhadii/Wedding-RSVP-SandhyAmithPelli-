@@ -380,7 +380,7 @@
             color: #555;
         }
 
-        /* --- NEW RSVP SECTION --- */
+        /* --- RSVP SECTION --- */
         .rsvp-outer-wrapper {
             width: 100vw;
             margin-top: 40px;
@@ -558,7 +558,7 @@
             margin-bottom: 15px;
         }
 
-        /* --- REDESIGNED FOOTER --- */
+        /* --- FOOTER --- */
         footer {
             width: 100vw;
             text-align: center;
@@ -600,7 +600,7 @@
         ⏸️ Pause Music
     </button>
 
-    <!-- 2. LOCAL AUDIO FILE (Ensure 'wedding-audio.mp4' is in your folder) -->
+    <!-- 2. LOCAL AUDIO FILE -->
     <audio id="wedding-audio" loop>
         <source src="wedding-audio.mp4" type="audio/mp4">
         Your browser does not support the audio element.
@@ -621,12 +621,12 @@
     <!-- 4. MAIN INVITATION LAYOUT -->
     <div id="main-content">
         <main>
-            <!-- High-Res Central Poster View Component (Ensure 'Amith Wedding invitation.png' exists) -->
+            <!-- Central Poster View Component -->
             <div class="poster-container">
                 <img src="Amith Wedding invitation.png" alt="Wedding Invitation Poster">
             </div>
 
-            <!-- Double-Action Contextual Buttons Right Under Poster -->
+            <!-- Contextual Buttons Right Under Poster -->
             <div class="primary-actions">
                 <button class="btn-rsvp" onclick="scrollToRSVP()">RSVP Now</button>
                 <button class="btn-share" onclick="shareInvitation()">Share Invitation</button>
@@ -680,13 +680,13 @@
                 <div class="family-grid">
                     <div class="family-side">
                         <h4>Bride's & Groom's Parents</h4>
-                        <p> Nomula's Near & Dear - Gaddam's Near & Dear </p>
+                        <p>Gaddam Sathya - Nomula's Near & Dear</p>
                     </div>
                 </div>
             </div>
         </main>
 
-        <!-- REDESIGNED RSVP SECTION -->
+        <!-- RSVP SECTION -->
         <div id="rsvp-section" class="rsvp-outer-wrapper">
             <div class="rsvp-container">
                 <div class="rsvp-pre-title">Save the Date</div>
@@ -756,7 +756,7 @@
                                 </label>
                                 
                                 <label class="event-checkbox-card">
-                                    <input type="checkbox" name="events" value="miss_celebration" onclick="if(this.checked) { document.querySelectorAll('input[name=events]').forEach(cb => { if(cb !== this) cb.checked = false; }) }">
+                                    <input type="checkbox" name="events" value="miss_celebration">
                                     <div class="event-details">
                                         <span class="event-name">I'll Miss the Celebration</span>
                                         <span class="event-time">Sending my love & best wishes</span>
@@ -782,7 +782,7 @@
             </div>
         </div>
 
-        <!-- REDESIGNED FOOTER -->
+        <!-- FOOTER -->
         <footer>
             <h4 class="with-love">With Love</h4>
             <div class="footer-line"></div>
@@ -836,6 +836,26 @@
                 alert('Link copied to clipboard!');
             }
         }
+
+        // --- ENFORCED MUTUAL EXCLUSIVITY LOGIC FOR CHECKBOXES ---
+        const eventCheckboxes = document.querySelectorAll('input[name="events"]');
+        const missCheckbox = document.querySelector('input[name="events"][value="miss_celebration"]');
+
+        eventCheckboxes.forEach(cb => {
+            cb.addEventListener('change', function() {
+                if (this === missCheckbox && this.checked) {
+                    // If "I'll Miss" is selected, uncheck all individual events
+                    eventCheckboxes.forEach(otherCb => {
+                        if (otherCb !== missCheckbox) {
+                            otherCb.checked = false;
+                        }
+                    });
+                } else if (this !== missCheckbox && this.checked) {
+                    // If any active event is selected, clear the "I'll Miss" checkbox
+                    missCheckbox.checked = false;
+                }
+            });
+        });
 
         // AJAX Handle Form Submit
         const form = document.getElementById("rsvp-form");
