@@ -378,6 +378,7 @@
             font-size: 0.9rem;
             font-weight: 500;
             color: #555;
+            line-height: 1.5;
         }
 
         /* --- RSVP SECTION --- */
@@ -470,7 +471,7 @@
             border-bottom-color: var(--gold-accent);
         }
 
-        /* Attendance & Food Options Unified Grid Layout */
+        /* Attendance & Food Options Layout Maps */
         .attendance-options {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -502,25 +503,22 @@
             margin: 0;
         }
 
-        /* Selected Card Visual State */
+        /* Selection Class Injectors */
         .attendance-card.selected {
             border-color: var(--gold-accent);
             background-color: #fffdf9;
         }
 
         .events-checkbox-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
+            flex-direction: column;
             gap: 15px;
         }
 
-        @media (max-width: 500px) {
-            .events-checkbox-grid {
-                grid-template-columns: 1fr;
-            }
-            .attendance-options {
-                grid-template-columns: 1fr;
-            }
+        .event-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .event-checkbox-card {
@@ -563,6 +561,20 @@
             font-weight: 500;
         }
 
+        /* Inline Event Food Preferences Wrapper */
+        .inline-food-group {
+            margin-left: 25px;
+            padding: 12px 15px;
+            background-color: #faf8f5;
+            border-left: 3px solid var(--gold-accent);
+            border-radius: 0 4px 4px 0;
+        }
+
+        .inline-food-group label.field-label {
+            font-size: 0.65rem;
+            margin-bottom: 8px;
+        }
+
         textarea.rsvp-input {
             resize: vertical;
             min-height: 40px;
@@ -587,16 +599,63 @@
             background-color: #b89245;
         }
 
-        /* --- SUCCESS MESSAGE STYLING --- */
-        #success-message {
-            text-align: center;
-            padding: 20px;
+        /* --- VISUAL IMAGE-MATCHED SUCCESS CARD --- */
+        .success-card-wrapper {
+            background-color: transparent;
+            padding: 20px 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            box-sizing: border-box;
         }
 
-        #success-message h2 {
+        .success-card-border {
+            border: 2px solid #8e6d4c; 
+            border-radius: 12px;
+            background-color: #fffdf9; 
+            padding: 50px 30px;
+            width: 100%;
+            max-width: 440px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            box-sizing: border-box;
+        }
+
+        .success-card-border h2 {
             font-family: 'Cinzel', serif;
-            color: var(--primary-color);
-            margin-bottom: 15px;
+            color: #8a572a; 
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin: 0 0 25px 0;
+            letter-spacing: 0.5px;
+        }
+
+        .success-card-border p.status-msg {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.25rem;
+            color: #333333;
+            margin: 0 0 35px 0;
+            line-height: 1.4;
+            font-weight: 400;
+        }
+
+        .success-card-border p.excited-msg {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.05rem;
+            color: #4a4a4a;
+            line-height: 1.6;
+            margin: 0 0 45px 0;
+            font-weight: 400;
+            padding: 0 10px;
+        }
+
+        .success-card-border p.signature {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #222222;
+            margin: 0;
         }
 
         /* --- FOOTER --- */
@@ -667,13 +726,13 @@
                 <img src="Amith Wedding invitation.png" alt="Wedding Invitation Poster">
             </div>
 
-            <!-- Contextual Buttons Right Under Poster -->
+            <!-- Contextual Actions -->
             <div class="primary-actions">
                 <button class="btn-rsvp" onclick="scrollToRSVP()">RSVP Now</button>
                 <button class="btn-share" onclick="shareInvitation()">Share Invitation</button>
             </div>
 
-            <!-- Complete Event Stream Metadata Sections -->
+            <!-- Event Stream Timeline -->
             <h2 class="section-title">Wedding Details</h2>
             <p class="section-subtitle">మా సంతోష సమయాల్లో భాగం కావడానికి మీకు ఇదే మా ప్రేమపూర్వక ఆహ్వానం</p>
 
@@ -706,7 +765,7 @@
                 </div>
             </div>
 
-            <!-- Physical Venue Card Layout -->
+            <!-- Physical Venue Address Module -->
             <div class="venue-section">
                 <h3>📍 Venue</h3>
                 <p><strong>Mapple Lane Retreat</strong><br>5144 sr OH-119, Minster, OH 45865</p>
@@ -721,7 +780,7 @@
                 <div class="family-grid">
                     <div class="family-side">
                         <h4>Bride's & Groom's Parents</h4>
-                        <p>Gaddam Sathya - Nomula's Near & Dear</p>
+                        <p>Yamuna & Gaddam Sathya<br>Nomula's Near & Dear</p>
                     </div>
                 </div>
             </div>
@@ -748,7 +807,7 @@
                             <input type="email" id="email" name="email" class="rsvp-input" placeholder="you@example.com">
                         </div>
 
-                        <!-- ATTENDANCE RADIO SELECTION STEP -->
+                        <!-- STEP 1: INITIAL ATTENDANCE CHECK -->
                         <div class="rsvp-form-group">
                             <label class="field-label">Will you be attending the celebration?</label>
                             <div class="attendance-options">
@@ -763,7 +822,7 @@
                             </div>
                         </div>
 
-                        <!-- DYNAMIC CONTAINER: Visible only if Attendance is "Yes" -->
+                        <!-- STEP 2 DYNAMIC CONTAINER: Appears only on selecting "Yes" -->
                         <div id="conditional-attendance-details" style="display: none;">
                             
                             <div class="rsvp-form-group">
@@ -774,60 +833,88 @@
                             <div class="rsvp-form-group">
                                 <label class="field-label">Events You'll Attend</label>
                                 <div class="events-checkbox-grid">
-                                    <label class="event-checkbox-card">
-                                        <input type="checkbox" name="events" value="engagement">
-                                        <div class="event-details">
-                                            <span class="event-name">Engagement (Friday)</span>
-                                            <span class="event-time">Aug 21 • 9:30 AM</span>
-                                        </div>
-                                    </label>
                                     
-                                    <label class="event-checkbox-card">
-                                        <input type="checkbox" name="events" value="sangeeth">
-                                        <div class="event-details">
-                                            <span class="event-name">Sangeeth (Friday)</span>
-                                            <span class="event-time">Aug 21 • 6:00 PM</span>
-                                        </div>
-                                    </label>
+                                    <!-- Engagement Block -->
+                                    <div class="event-wrapper">
+                                        <label class="event-checkbox-card">
+                                            <input type="checkbox" name="events" value="engagement">
+                                            <div class="event-details">
+                                                <span class="event-name">Engagement (Friday)</span>
+                                                <span class="event-time">Aug 21 • 9:30 AM</span>
+                                            </div>
+                                        </label>
+                                    </div>
                                     
-                                    <label class="event-checkbox-card">
-                                        <input type="checkbox" name="events" value="haldi">
-                                        <div class="event-details">
-                                            <span class="event-name">Haldi (Saturday)</span>
-                                            <span class="event-time">Aug 22 • 9:30 AM</span>
+                                    <!-- Sangeeth Block + Inline Food Preference -->
+                                    <div class="event-wrapper">
+                                        <label class="event-checkbox-card">
+                                            <input type="checkbox" id="checkbox-sangeeth" name="events" value="sangeeth">
+                                            <div class="event-details">
+                                                <span class="event-name">Sangeeth (Friday)</span>
+                                                <span class="event-time">Aug 21 • 6:00 PM</span>
+                                            </div>
+                                        </label>
+                                        <div class="inline-food-group" id="food-group-sangeeth" style="display: none;">
+                                            <label class="field-label">Food Preference for Sangeeth</label>
+                                            <div class="attendance-options">
+                                                <label class="attendance-card" id="label-sangeeth-veg">
+                                                    <input type="radio" name="sangeeth_food_preference" value="veg">
+                                                    <span>Veg 🟢</span>
+                                                </label>
+                                                <label class="attendance-card" id="label-sangeeth-nonveg">
+                                                    <input type="radio" name="sangeeth_food_preference" value="non_veg">
+                                                    <span>Non-Veg 🔴</span>
+                                                </label>
+                                            </div>
                                         </div>
-                                    </label>
+                                    </div>
                                     
-                                    <label class="event-checkbox-card">
-                                        <input type="checkbox" name="events" value="pelli_kuthuru_koduku">
-                                        <div class="event-details">
-                                            <span class="event-name">Pelli Kuthuru & Pellikoduku (Saturday)</span>
-                                            <span class="event-time">Aug 22 • 4:00 PM</span>
-                                        </div>
-                                    </label>
+                                    <!-- Haldi Block -->
+                                    <div class="event-wrapper">
+                                        <label class="event-checkbox-card">
+                                            <input type="checkbox" name="events" value="haldi">
+                                            <div class="event-details">
+                                                <span class="event-name">Haldi (Saturday)</span>
+                                                <span class="event-time">Aug 22 • 9:30 AM</span>
+                                            </div>
+                                        </label>
+                                    </div>
                                     
-                                    <label class="event-checkbox-card">
-                                        <input type="checkbox" name="events" value="wedding">
-                                        <div class="event-details">
-                                            <span class="event-name">Wedding (Pelli) (Sunday)</span>
-                                            <span class="event-time">Aug 23 • 10:00 AM</span>
+                                    <!-- Pelli Kuthuru / Pellikoduku Block -->
+                                    <div class="event-wrapper">
+                                        <label class="event-checkbox-card">
+                                            <input type="checkbox" name="events" value="pelli_kuthuru_koduku">
+                                            <div class="event-details">
+                                                <span class="event-name">Pelli Kuthuru & Pellikoduku (Saturday)</span>
+                                                <span class="event-time">Aug 22 • 4:00 PM</span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    
+                                    <!-- Wedding Block + Inline Food Preference -->
+                                    <div class="event-wrapper">
+                                        <label class="event-checkbox-card">
+                                            <input type="checkbox" id="checkbox-wedding" name="events" value="wedding">
+                                            <div class="event-details">
+                                                <span class="event-name">Wedding (Pelli) (Sunday)</span>
+                                                <span class="event-time">Aug 23 • 10:00 AM</span>
+                                            </div>
+                                        </label>
+                                        <div class="inline-food-group" id="food-group-wedding" style="display: none;">
+                                            <label class="field-label">Food Preference for Wedding</label>
+                                            <div class="attendance-options">
+                                                <label class="attendance-card" id="label-wedding-veg">
+                                                    <input type="radio" name="wedding_food_preference" value="veg">
+                                                    <span>Veg 🟢</span>
+                                                </label>
+                                                <label class="attendance-card" id="label-wedding-nonveg">
+                                                    <input type="radio" name="wedding_food_preference" value="non_veg">
+                                                    <span>Non-Veg 🔴</span>
+                                                </label>
+                                            </div>
                                         </div>
-                                    </label>
-                                </div>
-                            </div>
+                                    </div>
 
-                            <!-- NEW CONDITIONAL MEAL OPTION CONTAINER -->
-                            <div class="rsvp-form-group" id="food-option-group" style="display: none;">
-                                <label class="field-label">Food Preference</label>
-                                <div class="attendance-options">
-                                    <label class="attendance-card" id="label-food-veg">
-                                        <input type="radio" name="food_preference" value="veg">
-                                        <span>Veg 🟢</span>
-                                    </label>
-                                    <label class="attendance-card" id="label-food-nonveg">
-                                        <input type="radio" name="food_preference" value="non_veg">
-                                        <span>Non-Veg 🔴</span>
-                                    </label>
                                 </div>
                             </div>
 
@@ -841,16 +928,23 @@
                         <button type="submit" class="btn-send-rsvp">Send RSVP</button>
                     </form>
 
-                    <!-- Hidden Success Message -->
+                    <!-- Exact Screenshot-Matched Success Card -->
                     <div id="success-message" style="display:none;">
-                        <h2>Thank You!</h2>
-                        <p>Your RSVP has been received with gratitude. We appreciate you taking the time to respond.</p>
+                        <div class="success-card-wrapper">
+                            <div class="success-card-border">
+                                <h2>Thank You!</h2>
+                                <p class="status-msg">Your RSVP has been<br>received.</p>
+                                <p class="excited-msg">We are so excited to celebrate our special day with you!</p>
+                                <p class="signature">- Sandhya & Amith</p>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
 
-        <!-- FOOTER -->
+        <!-- FOOTER LAYER -->
         <footer>
             <h4 class="with-love">With Love</h4>
             <div class="footer-line"></div>
@@ -905,41 +999,54 @@
             }
         }
 
-        // --- STEPPED ATTENDANCE & FOOD PREFERENCE LOGIC ---
+        // --- RSVP VISIBILITY CONDITION ENGINE ---
         const attendanceRadios = document.querySelectorAll('input[name="attendance"]');
         const conditionalDetails = document.getElementById('conditional-attendance-details');
         const totalMembersInput = document.getElementById('total-members');
-        const eventCheckboxes = document.querySelectorAll('input[name="events"]');
         const labelYes = document.getElementById('label-attend-yes');
         const labelNo = document.getElementById('label-attend-no');
 
-        // Food Elements
-        const foodOptionGroup = document.getElementById('food-option-group');
-        const foodRadios = document.querySelectorAll('input[name="food_preference"]');
-        const labelVeg = document.getElementById('label-food-veg');
-        const labelNonVeg = document.getElementById('label-food-nonveg');
+        // Sangeeth Food Elements
+        const cbSangeeth = document.getElementById('checkbox-sangeeth');
+        const groupSangeeth = document.getElementById('food-group-sangeeth');
+        const radiosSangeeth = document.querySelectorAll('input[name="sangeeth_food_preference"]');
+        const lblSangeethVeg = document.getElementById('label-sangeeth-veg');
+        const lblSangeethNonVeg = document.getElementById('label-sangeeth-nonveg');
 
-        // Handles rendering the food selection area dynamically
-        function calculateFoodOptionVisibility() {
-            const sangeethChecked = document.querySelector('input[name="events"][value="sangeeth"]').checked;
-            const weddingChecked = document.querySelector('input[name="events"][value="wedding"]').checked;
+        // Wedding Food Elements
+        const cbWedding = document.getElementById('checkbox-wedding');
+        const groupWedding = document.getElementById('food-group-wedding');
+        const radiosWedding = document.querySelectorAll('input[name="wedding_food_preference"]');
+        const lblWeddingVeg = document.getElementById('label-wedding-veg');
+        const lblWeddingNonVeg = document.getElementById('label-wedding-nonveg');
 
-            if (sangeethChecked || weddingChecked) {
-                foodOptionGroup.style.display = 'block';
-                foodRadios.forEach(r => r.required = true);
+        // Dynamic Sangeeth visibility evaluation
+        cbSangeeth.addEventListener('change', function() {
+            if (this.checked) {
+                groupSangeeth.style.display = 'block';
+                radiosSangeeth.forEach(r => r.required = true);
             } else {
-                // Hide and clear parameters if neither are checked
-                foodOptionGroup.style.display = 'none';
-                foodRadios.forEach(r => {
-                    r.required = false;
-                    r.checked = false;
-                });
-                labelVeg.classList.remove('selected');
-                labelNonVeg.classList.remove('selected');
+                groupSangeeth.style.display = 'none';
+                radiosSangeeth.forEach(r => { r.required = false; r.checked = false; });
+                lblSangeethVeg.classList.remove('selected');
+                lblSangeethNonVeg.classList.remove('selected');
             }
-        }
+        });
 
-        // Parent Attendance Logic Toggle
+        // Dynamic Wedding visibility evaluation
+        cbWedding.addEventListener('change', function() {
+            if (this.checked) {
+                groupWedding.style.display = 'block';
+                radiosWedding.forEach(r => r.required = true);
+            } else {
+                groupWedding.style.display = 'none';
+                radiosWedding.forEach(r => { r.required = false; r.checked = false; });
+                lblWeddingVeg.classList.remove('selected');
+                lblWeddingNonVeg.classList.remove('selected');
+            }
+        });
+
+        // Parent Attendance Logic Stream
         attendanceRadios.forEach(radio => {
             radio.addEventListener('change', function() {
                 labelYes.classList.remove('selected');
@@ -952,40 +1059,45 @@
                     if (totalMembersInput.value == 0 || totalMembersInput.value == "") {
                         totalMembersInput.value = 1;
                     }
-                    calculateFoodOptionVisibility();
                 } else {
                     conditionalDetails.style.display = 'none';
                     totalMembersInput.value = 0;
                     totalMembersInput.min = "0";
-                    eventCheckboxes.forEach(cb => cb.checked = false);
                     
-                    // Reset Food logic completely on choosing No
-                    foodOptionGroup.style.display = 'none';
-                    foodRadios.forEach(r => {
-                        r.required = false;
-                        r.checked = false;
-                    });
-                    labelVeg.classList.remove('selected');
-                    labelNonVeg.classList.remove('selected');
+                    // Uncheck everything on "No" selection
+                    document.querySelectorAll('input[name="events"]').forEach(cb => cb.checked = false);
+                    groupSangeeth.style.display = 'none';
+                    groupWedding.style.display = 'none';
+                    
+                    radiosSangeeth.forEach(r => { r.required = false; r.checked = false; });
+                    radiosWedding.forEach(r => { r.required = false; r.checked = false; });
+                    
+                    lblSangeethVeg.classList.remove('selected');
+                    lblSangeethNonVeg.classList.remove('selected');
+                    lblWeddingVeg.classList.remove('selected');
+                    lblWeddingNonVeg.classList.remove('selected');
                 }
             });
         });
 
-        // Monitor individual checkboxes to trigger food menu option
-        eventCheckboxes.forEach(cb => {
-            cb.addEventListener('change', calculateFoodOptionVisibility);
-        });
-
-        // Food Selection Card Highlights
-        foodRadios.forEach(radio => {
+        // Active State Radio Button Toggles for Food Selection Cards
+        radiosSangeeth.forEach(radio => {
             radio.addEventListener('change', function() {
-                labelVeg.classList.remove('selected');
-                labelNonVeg.classList.remove('selected');
+                lblSangeethVeg.classList.remove('selected');
+                lblSangeethNonVeg.classList.remove('selected');
                 this.closest('.attendance-card').classList.add('selected');
             });
         });
 
-        // AJAX Handle Form Submit
+        radiosWedding.forEach(radio => {
+            radio.addEventListener('change', function() {
+                lblWeddingVeg.classList.remove('selected');
+                lblWeddingNonVeg.classList.remove('selected');
+                this.closest('.attendance-card').classList.add('selected');
+            });
+        });
+
+        // Formspree Post AJAX Controller
         const form = document.getElementById("rsvp-form");
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
